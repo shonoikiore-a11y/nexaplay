@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Minecraft Guides (2025) — Seeds, Tips & Walkthroughs | NexaPlay</title>
+  <meta name="description" content="The best Minecraft guides for 2025. Seeds, diamond locations, beginner walkthroughs, survival tips, and more. Java & Bedrock covered." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black: #0A0A0A;
+      --black-2: #111111;
+      --black-3: #1A1A1A;
+      --gold: #FFD700;
+      --gold-soft: rgba(255,215,0,0.10);
+      --white: #FFFFFF;
+      --gray: #888888;
+      --green: #22C55E;
+      --blue: #60A5FA;
+      --blue-soft: rgba(96,165,250,0.10);
+      --purple: #A78BFA;
+      --purple-soft: rgba(167,139,250,0.10);
+      --orange: #FB923C;
+      --orange-soft: rgba(251,146,60,0.10);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--white);
+      font-family: 'Inter', Arial, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(10,10,10,0.93);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255,215,0,0.15);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5%; height: 64px;
+    }
+
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 20px; font-weight: 900; letter-spacing: 1px;
+    }
+
+    .nav-logo svg { width: 32px; height: 32px; }
+    .nav-logo em { color: var(--gold); font-style: normal; }
+
+    .nav-links {
+      display: flex; gap: 28px; list-style: none;
+      font-size: 14px; font-weight: 600;
+    }
+
+    .nav-links a { color: var(--gray); transition: color 0.2s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--gold); }
+
+    .nav-cta {
+      background: var(--gold); color: var(--black);
+      font-weight: 800; font-size: 13px;
+      padding: 8px 20px; border-radius: 6px; transition: opacity 0.2s;
+    }
+
+    .nav-cta:hover { opacity: 0.85; }
+
+    /* ── BREADCRUMB ── */
+    .breadcrumb {
+      padding: 14px 5%; font-size: 13px; color: var(--gray);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      display: flex; gap: 8px; align-items: center;
+    }
+
+    .breadcrumb a { color: var(--gold); }
+    .breadcrumb span { opacity: 0.4; }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 60px 5% 56px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      position: relative; overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute; top: -100px; right: -100px;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(96,165,250,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      display: flex; justify-content: space-between;
+      align-items: flex-end; gap: 40px; flex-wrap: wrap;
+    }
+
+    .hero-left { max-width: 620px; }
+
+    .hero .label {
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 3px; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 12px;
+    }
+
+    .hero h1 {
+      font-size: clamp(32px, 5vw, 54px);
+      font-weight: 900; line-height: 1.1; margin-bottom: 16px;
+    }
+
+    .hero h1 span { color: var(--gold); }
+
+    .hero p {
+      font-size: 15px; color: rgba(255,255,255,0.5);
+      line-height: 1.75; margin-bottom: 28px; max-width: 520px;
+    }
+
+    .hero-tags { display: flex; gap: 10px; flex-wrap: wrap; }
+
+    .tag-pill {
+      font-size: 12px; font-weight: 600;
+      padding: 6px 14px; border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.6);
+    }
+
+    .tag-pill.java { border-color: rgba(251,146,60,0.4); color: var(--orange); background: var(--orange-soft); }
+    .tag-pill.bedrock { border-color: rgba(96,165,250,0.4); color: var(--blue); background: var(--blue-soft); }
+    .tag-pill.both { border-color: rgba(167,139,250,0.4); color: var(--purple); background: var(--purple-soft); }
+
+    .hero-stats {
+      display: flex; gap: 32px; flex-wrap: wrap;
+    }
+
+    .hstat { text-align: center; }
+    .hstat strong { display: block; font-size: 28px; font-weight: 900; color: var(--gold); }
+    .hstat span { font-size: 12px; color: var(--gray); }
+
+    /* ── FILTER BAR ── */
+    .filter-bar {
+      padding: 20px 5%;
+      display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      position: sticky; top: 64px; z-index: 90;
+      background: rgba(10,10,10,0.95);
+      backdrop-filter: blur(8px);
+    }
+
+    .filter-btn {
+      background: var(--black-2);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--gray);
+      font-size: 13px; font-weight: 600;
+      font-family: 'Inter', Arial, sans-serif;
+      padding: 8px 18px; border-radius: 999px;
+      cursor: pointer; transition: all 0.15s;
+    }
+
+    .filter-btn:hover { border-color: rgba(255,215,0,0.3); color: var(--white); }
+
+    .filter-btn.active {
+      background: var(--gold); border-color: var(--gold);
+      color: var(--black);
+    }
+
+    .search-wrap {
+      position: relative; margin-left: auto;
+      min-width: 200px; max-width: 300px;
+    }
+
+    .search-wrap svg {
+      position: absolute; left: 12px; top: 50%;
+      transform: translateY(-50%);
+      width: 15px; height: 15px; stroke: var(--gray); fill: none;
+    }
+
+    #search {
+      width: 100%;
+      background: var(--black-2);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 999px; color: var(--white);
+      font-size: 13px; font-family: 'Inter', Arial, sans-serif;
+      padding: 8px 14px 8px 36px; outline: none;
+      transition: border-color 0.2s;
+    }
+
+    #search:focus { border-color: rgba(255,215,0,0.4); }
+    #search::placeholder { color: var(--gray); }
+
+    /* ── MAIN LAYOUT ── */
+    .layout {
+      display: flex; max-width: 1200px;
+      margin: 0 auto; padding: 0 5%; gap: 48px;
+    }
+
+    .main { flex: 1; min-width: 0; padding: 44px 0 80px; }
+    .sidebar { width: 260px; min-width: 260px; padding: 44px 0 80px; }
+
+    /* ── FEATURED GUIDE ── */
+    .featured-guide {
+      background: var(--black-2);
+      border: 1px solid rgba(255,215,0,0.2);
+      border-radius: 16px; overflow: hidden;
+      margin-bottom: 40px;
+      display: flex; gap: 0;
+    }
+
+    .featured-accent {
+      width: 6px; min-width: 6px;
+      background: var(--gold);
+    }
+
+    .featured-body { padding: 28px 28px 28px 24px; flex: 1; }
+
+    .featured-label {
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 2px; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 10px;
+    }
+
+    .featured-body h2 {
+      font-size: 22px; font-weight: 900;
+      margin-bottom: 8px; line-height: 1.3;
+    }
+
+    .featured-body p {
+      font-size: 14px; color: rgba(255,255,255,0.5);
+      margin-bottom: 18px; line-height: 1.6;
+    }
+
+    .featured-meta {
+      display: flex; gap: 16px; flex-wrap: wrap;
+      font-size: 12px; color: var(--gray);
+      margin-bottom: 18px;
+    }
+
+    .read-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--gold); color: var(--black);
+      font-size: 13px; font-weight: 800;
+      padding: 10px 22px; border-radius: 8px;
+      transition: opacity 0.2s;
+    }
+
+    .read-btn:hover { opacity: 0.85; }
+
+    /* ── SECTION LABEL ── */
+    .section-label {
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 3px; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 16px;
+    }
+
+    /* ── GUIDES GRID ── */
+    .guides-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px; margin-bottom: 48px;
+    }
+
+    .guide-card {
+      background: var(--black-2);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 14px; overflow: hidden;
+      transition: border-color 0.2s, transform 0.15s;
+      cursor: pointer; display: flex; flex-direction: column;
+    }
+
+    .guide-card:hover {
+      border-color: rgba(255,215,0,0.35);
+      transform: translateY(-3px);
+    }
+
+    .guide-thumb {
+      width: 100%; height: 120px;
+      background: var(--black-3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 44px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      position: relative;
+    }
+
+    .guide-version {
+      position: absolute; top: 10px; right: 10px;
+      font-size: 10px; font-weight: 700; letter-spacing: 1px;
+      padding: 3px 8px; border-radius: 4px;
+    }
+
+    .v-java { background: var(--orange-soft); color: var(--orange); border: 1px solid rgba(251,146,60,0.3); }
+    .v-bedrock { background: var(--blue-soft); color: var(--blue); border: 1px solid rgba(96,165,250,0.3); }
+    .v-both { background: var(--purple-soft); color: var(--purple); border: 1px solid rgba(167,139,250,0.3); }
+
+    .guide-body { padding: 18px; flex: 1; display: flex; flex-direction: column; }
+
+    .guide-type {
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 2px; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 8px;
+    }
+
+    .guide-card h3 {
+      font-size: 15px; font-weight: 700;
+      line-height: 1.4; margin-bottom: 8px; flex: 1;
+    }
+
+    .guide-meta {
+      display: flex; gap: 12px; margin-top: 12px;
+      font-size: 12px; color: var(--gray);
+      padding-top: 12px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .guide-meta span { display: flex; align-items: center; gap: 4px; }
+
+    /* ── SEEDS SECTION ── */
+    .seeds-section { margin-bottom: 48px; }
+
+    .seeds-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 14px;
+    }
+
+    .seed-card {
+      background: var(--black-2);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 12px; padding: 18px 20px;
+      transition: border-color 0.2s, transform 0.15s;
+      cursor: pointer;
+    }
+
+    .seed-card:hover {
+      border-color: rgba(255,215,0,0.3);
+      transform: translateY(-2px);
+    }
+
+    .seed-num {
+      font-family: 'Courier New', monospace;
+      font-size: 18px; font-weight: 700;
+      color: var(--gold); letter-spacing: 1px;
+      margin-bottom: 8px; display: block;
+    }
+
+    .seed-card h3 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+    .seed-card p { font-size: 12px; color: rgba(255,255,255,0.45); line-height: 1.5; }
+
+    .seed-tags { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+
+    .seed-tag {
+      font-size: 10px; font-weight: 600; padding: 2px 8px;
+      border-radius: 4px; letter-spacing: 0.5px;
+    }
+
+    /* ── DIFFICULTY BADGE ── */
+    .diff {
+      font-size: 10px; font-weight: 700; padding: 2px 8px;
+      border-radius: 4px; letter-spacing: 0.5px;
+    }
+
+    .diff-easy { background: rgba(34,197,94,0.12); color: var(--green); border: 1px solid rgba(34,197,94,0.25); }
+    .diff-med { background: var(--orange-soft); color: var(--orange); border: 1px solid rgba(251,146,60,0.25); }
+    .diff-hard { background: rgba(239,68,68,0.1); color: #F87171; border: 1px solid rgba(239,68,68,0.2); }
+
+    /* ── NO RESULTS ── */
+    .no-results {
+      text-align: center; padding: 60px 20px;
+      color: var(--gray); font-size: 15px; display: none;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar-box {
+      background: var(--black-2);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 12px; padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .sidebar-box h3 {
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 2px; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 14px;
+    }
+
+    .sb-list { display: flex; flex-direction: column; gap: 8px; }
+
+    .sb-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 12px; border-radius: 8px;
+      background: var(--black-3);
+      border: 1px solid rgba(255,255,255,0.05);
+      font-size: 13px; color: rgba(255,255,255,0.65);
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .sb-item:hover { color: var(--gold); border-color: rgba(255,215,0,0.2); }
+
+    .sb-num {
+      font-size: 11px; font-weight: 900;
+      color: var(--gold); min-width: 20px;
+    }
+
+    .tip-box {
+      background: var(--gold-soft);
+      border: 1px solid rgba(255,215,0,0.2);
+      border-radius: 10px; padding: 14px;
+      font-size: 13px; color: rgba(255,255,255,0.6);
+      line-height: 1.6; margin-bottom: 20px;
+    }
+
+    .tip-box strong {
+      color: var(--gold); display: block;
+      font-size: 11px; letter-spacing: 1px;
+      text-transform: uppercase; margin-bottom: 6px;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 32px 5%;
+      display: flex; justify-content: space-between;
+      align-items: center; flex-wrap: wrap; gap: 12px;
+    }
+
+    footer p { font-size: 12px; color: var(--gray); }
+
+    @media (max-width: 900px) {
+      .sidebar { display: none; }
+      .layout { padding: 0 4%; }
+      .featured-guide { flex-direction: column; }
+      .featured-accent { width: 100%; height: 5px; min-width: unset; }
+    }
+
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .hero-inner { flex-direction: column; }
+      .filter-bar { gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="/" class="nav-logo">
+      <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="32" height="32" rx="7" fill="#111"/>
+        <circle cx="16" cy="16" r="11" stroke="#FFD700" stroke-width="1.5" fill="none"/>
+        <path d="M9 9 C7 12 7 19 10 23 C11 25 13 27 14 28 C12 25 11 22 11.5 19 C12 16 14 12 16 10 Z" fill="#FFD700"/>
+        <path d="M23 23 C25 20 25 13 22 9 C21 7 19 5 18 4 C20 7 21 10 20.5 13 C20 17 18 21 16 23 Z" fill="#FFD700"/>
+        <path d="M14 28 C16 26 17 23 18 20 C19 17 19 14 20 11 L18 4 C17 7 16 11 15 15 C14 19 12 23 10 26 Z" fill="#FFD700" opacity="0.7"/>
+      </svg>
+      NEXA<em>PLAY</em>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/roblox-codes/">Roblox Codes</a></li>
+      <li><a href="/minecraft-guides/" class="active">Minecraft</a></li>
+      <li><a href="/tier-lists/">Tier Lists</a></li>
+      <li><a href="/news/">News</a></li>
+    </ul>
+    <a href="#guides" class="nav-cta">Browse Guides</a>
+  </nav>
+
+  <!-- BREADCRUMB -->
+  <div class="breadcrumb">
+    <a href="/">Home</a>
+    <span>›</span>
+    <span style="color:var(--white)">Minecraft Guides</span>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-left">
+        <p class="label">Guides, seeds & tips</p>
+        <h1>Minecraft Guides <span>(2025)</span></h1>
+        <p>Everything you need to play smarter. Seeds with the best spawns, beginner walkthroughs, diamond hunting guides, and more — for both Java and Bedrock.</p>
+        <div class="hero-tags">
+          <span class="tag-pill java">Java Edition</span>
+          <span class="tag-pill bedrock">Bedrock Edition</span>
+          <span class="tag-pill both">Both Editions</span>
+        </div>
+      </div>
+      <div class="hero-stats">
+        <div class="hstat"><strong>25+</strong><span>Guides</span></div>
+        <div class="hstat"><strong>Java &<br/>Bedrock</strong><span>Versions</span></div>
+        <div class="hstat"><strong>Free</strong><span>Always</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FILTER BAR -->
+  <div class="filter-bar">
+    <button class="filter-btn active" data-filter="all" onclick="setFilter('all', this)">All Guides</button>
+    <button class="filter-btn" data-filter="seeds" onclick="setFilter('seeds', this)">🌱 Seeds</button>
+    <button class="filter-btn" data-filter="survival" onclick="setFilter('survival', this)">⚔️ Survival</button>
+    <button class="filter-btn" data-filter="beginner" onclick="setFilter('beginner', this)">📖 Beginner</button>
+    <button class="filter-btn" data-filter="tips" onclick="setFilter('tips', this)">💡 Tips & Tricks</button>
+    <div class="search-wrap">
+      <svg viewBox="0 0 24 24" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="search" placeholder="Search guides..." autocomplete="off" />
+    </div>
+  </div>
+
+  <div class="layout">
+    <main class="main" id="guides">
+
+      <!-- FEATURED -->
+      <a href="/minecraft-guides/best-seeds-2025" class="featured-guide">
+        <div class="featured-accent"></div>
+        <div class="featured-body">
+          <p class="featured-label">⭐ Featured guide</p>
+          <h2>Best Minecraft Seeds 2025 — Top 20 Seeds for Java & Bedrock</h2>
+          <p>The most spectacular spawns of 2025 — villages next to spawners, exposed ancient cities, mushroom islands, and more. Coordinates included for every key location.</p>
+          <div class="featured-meta">
+            <span>🌱 Seeds</span>
+            <span>⏱ 8 min read</span>
+            <span>🔷 Java & Bedrock</span>
+            <span>Updated June 2025</span>
+          </div>
+          <span class="read-btn">Read guide →</span>
+        </div>
+      </a>
+
+      <!-- SEEDS SECTION -->
+      <div class="seeds-section" id="seedsSection">
+        <p class="section-label">🌱 Top seeds</p>
+        <div class="seeds-grid" id="seedsGrid">
+          <a href="/minecraft-guides/best-seeds-2025" class="seed-card" data-cat="seeds">
+            <span class="seed-num">-1840883735</span>
+            <h3>Village + Stronghold Spawn</h3>
+            <p>Spawn directly next to a village with a stronghold underneath. Speedrunner's dream.</p>
+            <div class="seed-tags">
+              <span class="seed-tag v-both">Both</span>
+              <span class="diff diff-easy">Beginner</span>
+            </div>
+          </a>
+          <a href="/minecraft-guides/best-seeds-2025" class="seed-card" data-cat="seeds">
+            <span class="seed-num">12542</span>
+            <h3>Ancient City at Spawn</h3>
+            <p>Exposed ancient city visible from the surface. Wild Sculk everywhere. High risk, massive reward.</p>
+            <div class="seed-tags">
+              <span class="seed-tag v-java">Java</span>
+              <span class="diff diff-hard">Hard</span>
+            </div>
+          </a>
+          <a href="/minecraft-guides/best-seeds-2025" class="seed-card" data-cat="seeds">
+            <span class="seed-num">3427890</span>
+            <h3>Mushroom Island Survival</h3>
+            <p>Isolated mushroom island with zero hostile mob spawns. Perfect peaceful survival run.</p>
+            <div class="seed-tags">
+              <span class="seed-tag v-both">Both</span>
+              <span class="diff diff-easy">Easy</span>
+            </div>
+          </a>
+          <a href="/minecraft-guides/best-seeds-2025" class="seed-card" data-cat="seeds">
+            <span class="seed-num">-1613508686</span>
+            <h3>Triple Biome Spawn</h3>
+            <p>Spawn at the meeting point of desert, jungle, and savanna. Resources everywhere from day one.</p>
+            <div class="seed-tags">
+              <span class="seed-tag v-bedrock">Bedrock</span>
+              <span class="diff diff-med">Medium</span>
+            </div>
+          </a>
+          <a href="/minecraft-guides/best-seeds-2025" class="seed-card" data-cat="seeds">
+            <span class="seed-num">7557202657960</span>
+            <h3>Cherry Grove + Mansion</h3>
+            <p>Beautiful cherry blossom spawn with a woodland mansion visible in the distance.</p>
+            <div class="seed-tags">
+              <span class="seed-tag v-java">Java</span>
+              <span class="diff diff-med">Medium</span>
+            </div>
+          </a>
+          <a href="/minecraft-guides/best-seeds-2025" class="seed-card" data-cat="seeds">
+            <span class="seed-num">-456778</span>
+            <h3>Island Survival Starter</h3>
+            <p>Tiny island with one tree. The ultimate minimalist survival challenge.</p>
+            <div class="seed-tags">
+              <span class="seed-tag v-both">Both</span>
+              <span class="diff diff-hard">Hard</span>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- GUIDES GRID -->
+      <div id="guidesSection">
+        <p class="section-label" id="guidesLabel">📚 All guides</p>
+        <div class="no-results" id="noResults">No guides found for that search.</div>
+        <div class="guides-grid" id="guidesGrid">
+
+          <a href="/minecraft-guides/beginners-guide" class="guide-card" data-cat="beginner">
+            <div class="guide-thumb">🌍
+              <span class="guide-version v-both">Both</span>
+            </div>
+            <div class="guide-body">
+              <p class="guide-type">Beginner</p>
+              <h3>Minecraft Beginner's Guide 2025 — Everything You Need to Know</h3>
+              <div class="guide-meta">
+                <span>📖 12 min read</span>
+                <span class="diff diff-easy">Easy</span>
+              </div>
+            </div>
+          </a>
+
+          <a href="/minecraft-guides/how-to-find-diamonds" class="guide-card" data-cat="survival">
+            <div class="guide-thumb">💎
+              <span class="guide-version v-both">Both</span>
+            </div>
+            <div class="guide-body">
+              <p class="guide-type">Survival</p>
+              <h3>How to Find Diamonds in Minecraft — Best Y-Level & Methods</h3>
+              <div class="guide-meta">
+                <span>📖 6 min read</span>
+                <span class="diff diff-easy">Easy</span>
+              </div>
+            </div>
+          </a>
+
+          <a href="/minecraft-guides/best-survival-seeds" class="guide-card" data-cat="seeds">
+            <div class="guide-thumb">🌱
+              <span class="guide-version v-both">Both</span>
+            </div>
+            <div class="guide-body">
+              <p class="guide-type">Seeds</p>
+              <h3>Best Minecraft Survival Seeds 2025 — Top Picks for Long Runs</h3>
+              <div class="guide-meta">
+                <span>📖 7 min read</span>
+                <span class="diff diff-med">Medium</span>
+              </div>
+            </div>
+          </a>
+
+          <a href="/minecraft-guides/donutsmp-guide" class="guide-card" data-cat="survival">
+            <div class="guide-thumb">🍩
+              <span class="guide-version v-java">Java</span>
+            </div>
+            <div class="guide-body">
+              <p class="guide-type">Server Guide</p>
+              <h3>DonutSMP Getting Started Guide — How to Join & Survive</h3>
+              <div class="guide-meta">
+                <span>📖 8 min read</span>
+                <span class="diff diff-med">Medium</span>
+              </div>
+            </div>
+          </a>
+
+          <a href="/minecraft-guides/how-to-beat-ender-dragon" class="guide-card" data-cat="survival">
+            <div class="guide-thumb">🐉
+              <span class="guide-version v-both">Both</span>
+            </div>
+            <div class="guide-body">
+              <p class="guide-type">Survival</p>
+              <h3>How to Beat the Ender Dragon — Complete Guide for 2025</h3>
+              <div class="guide-meta">
+                <span>📖 9 min read</span>
+                <span class="diff diff-med">Medium</span>
+              </div>
+            </div>
+          </a>
+
+          <a href="/minecraft-guides/best-enchantments" class="guide-card" data-cat="tips">
+            <div class="guide-thumb">✨
+              <span class="guide-version v-both">Both</span>
+            </div>
+            <div class="guide-body">
+              <p class="guide-type">Tips & Tricks</p>
+              <h3>Best Enchantments in Minecraft 2025 — Ranked by Usefulness</h3>
+              <div class="guide-meta">
+                <span>📖 7 min read</span>
+                <span class="diff diff-med">Medium</span>
+              </div>
+            </div>
+          </a>
+
+          <a href="/minecraft-guides/how-to-find-ancient-city" class="guide-card" data-cat="survival">
+            <div class="guide-thumb">🏛️
+              <span class="guide-version v-both">Both</span>
+            </div>
+            <div class="guide-body">
+              <p class="guide-type">Survival</p>
+              <h3>How to Find an Ancient City in Minecraft — Location Guide</h3>
+              <div class="guide-meta">
+                <span>📖 5 min read</span>
+                <span class="diff diff-hard">Hard</span>
+              </div>
+            </div>
+          </a>
+
+          <a href="/minecraft-guides/best-xp-farms" class="guide-card" data-cat="tips">
+            <div class="guide-thumb">⚡
+              <span class="guide-version v-both">Both</span>
+            </div>
+            <div class="guide-body">
+              <p class="guide-type">Tips & Tricks</p>
+              <h3>Best XP Farms in Minecraft 2025 — Easy Builds That Actually Work</h3>
+              <div class="guide-meta">
+                <span>📖 8 min read</span>
+                <span class="diff diff-med">Medium</span>
+              </div>
+            </div>
+          </a>
+
+          <a href="/minecraft-guides/nether-survival-guide" class="guide-card" data-cat="survival">
+            <div class="guide-thumb">🔥
+              <span class="guide-version v-both">Both</span>
+            </div>
+            <div class="guide-body">
+              <p class="guide-type">Survival</p>
+              <h3>Nether Survival Guide — How to Stay Alive and Find Fortresses</h3>
+              <div class="guide-meta">
+                <span>📖 7 min read</span>
+                <span class="diff diff-med">Medium</span>
+              </div>
+            </div>
+          </a>
+
+          <a href="/minecraft-guides/best-java-seeds" class="guide-card" data-cat="seeds">
+            <div class="guide-thumb">☕
+              <span class="guide-version v-java">Java</span>
+            </div>
+            <div class="guide-body">
+              <p class="guide-type">Seeds</p>
+              <h3>Best Java Edition Seeds 2025 — Spectacular Spawns & Hidden Gems</h3>
+              <div class="guide-meta">
+                <span>📖 6 min read</span>
+                <span class="diff diff-easy">Easy</span>
+              </div>
+            </div>
+          </a>
+
+          <a href="/minecraft-guides/beginner-house-guide" class="guide-card" data-cat="beginner">
+            <div class="guide-thumb">🏠
+              <span class="guide-version v-both">Both</span>
+            </div>
+            <div class="guide-body">
+              <p class="guide-type">Beginner</p>
+              <h3>How to Build Your First House in Minecraft — Step-by-Step</h3>
+              <div class="guide-meta">
+                <span>📖 5 min read</span>
+                <span class="diff diff-easy">Easy</span>
+              </div>
+            </div>
+          </a>
+
+          <a href="/minecraft-guides/how-to-make-iron-farm" class="guide-card" data-cat="tips">
+            <div class="guide-thumb">⚙️
+              <span class="guide-version v-both">Both</span>
+            </div>
+            <div class="guide-body">
+              <p class="guide-type">Tips & Tricks</p>
+              <h3>How to Make an Iron Farm in Minecraft — Beginner-Friendly Build</h3>
+              <div class="guide-meta">
+                <span>📖 6 min read</span>
+                <span class="diff diff-med">Medium</span>
+              </div>
+            </div>
+          </a>
+
+        </div>
+      </div>
+
+    </main>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+      <div class="sidebar-box">
+        <h3>🔥 Most popular</h3>
+        <div class="sb-list">
+          <a href="/minecraft-guides/best-seeds-2025" class="sb-item"><span class="sb-num">01</span> Best Seeds 2025</a>
+          <a href="/minecraft-guides/how-to-find-diamonds" class="sb-item"><span class="sb-num">02</span> Find Diamonds</a>
+          <a href="/minecraft-guides/beginners-guide" class="sb-item"><span class="sb-num">03</span> Beginner Guide</a>
+          <a href="/minecraft-guides/how-to-beat-ender-dragon" class="sb-item"><span class="sb-num">04</span> Beat Ender Dragon</a>
+          <a href="/minecraft-guides/best-enchantments" class="sb-item"><span class="sb-num">05</span> Best Enchantments</a>
+          <a href="/minecraft-guides/best-xp-farms" class="sb-item"><span class="sb-num">06</span> Best XP Farms</a>
+        </div>
+      </div>
+
+      <div class="tip-box">
+        <strong>💡 Quick tip</strong>
+        Diamonds spawn most at Y-level -58 in 1.21. Strip mine in a straight line for the best results.
+      </div>
+
+      <div class="sidebar-box">
+        <h3>🎮 Edition guide</h3>
+        <div class="sb-list">
+          <a href="/minecraft-guides/best-java-seeds" class="sb-item"><span style="color:var(--orange)">☕</span> Java Edition Seeds</a>
+          <a href="/minecraft-guides/best-bedrock-seeds" class="sb-item"><span style="color:var(--blue)">📱</span> Bedrock Edition Seeds</a>
+          <a href="/minecraft-guides/java-vs-bedrock" class="sb-item"><span style="color:var(--purple)">🔷</span> Java vs Bedrock</a>
+        </div>
+      </div>
+
+      <div class="sidebar-box">
+        <h3>📂 Other categories</h3>
+        <div class="sb-list">
+          <a href="/roblox-codes/" class="sb-item"><span>🎮</span> Roblox Codes</a>
+          <a href="/tier-lists/" class="sb-item"><span>🏆</span> Tier Lists</a>
+          <a href="/news/" class="sb-item"><span>📡</span> Gaming News</a>
+        </div>
+      </div>
+
+    </aside>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2025 NexaPlay. All rights reserved.</p>
+    <p>Built for gamers. Updated daily.</p>
+  </footer>
+
+  <script>
+    let activeFilter = 'all';
+    let searchQuery = '';
+
+    function setFilter(filter, btn) {
+      activeFilter = filter;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      applyFilters();
+    }
+
+    document.getElementById('search').addEventListener('input', function() {
+      searchQuery = this.value.toLowerCase().trim();
+      applyFilters();
+    });
+
+    function applyFilters() {
+      const cards = document.querySelectorAll('.guide-card');
+      const seedCards = document.querySelectorAll('.seed-card');
+      const seedsSection = document.getElementById('seedsSection');
+      let visibleCount = 0;
+
+      // Handle guide cards
+      cards.forEach(card => {
+        const cat = card.dataset.cat;
+        const text = card.innerText.toLowerCase();
+        const matchFilter = activeFilter === 'all' || cat === activeFilter;
+        const matchSearch = !searchQuery || text.includes(searchQuery);
+        const show = matchFilter && matchSearch;
+        card.style.display = show ? '' : 'none';
+        if (show) visibleCount++;
+      });
+
+      // Handle seed section visibility
+      const showSeeds = (activeFilter === 'all' || activeFilter === 'seeds') &&
+                        (!searchQuery || 'seeds'.includes(searchQuery) || 'seed'.includes(searchQuery));
+      seedsSection.style.display = showSeeds ? '' : 'none';
+
+      document.getElementById('noResults').style.display = visibleCount === 0 && !showSeeds ? 'block' : 'none';
+    }
+  </script>
+
+</body>
+</html>
