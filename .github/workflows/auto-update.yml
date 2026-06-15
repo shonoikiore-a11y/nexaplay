@@ -19,14 +19,16 @@ jobs:
         with:
           node-version: '18'
 
-      - name: Update content
-        run: |
-          echo "Auto update ran on $(date)" > last-updated.txt
+      - name: Install dependencies
+        run: npm install node-fetch cheerio
+
+      - name: Run code updater
+        run: node update-codes.js
 
       - name: Commit and push changes
         run: |
-          git config --global user.name "Auto Updater Bot"
+          git config --global user.name "NexaPlay Bot"
           git config --global user.email "bot@nexaplay.com"
           git add .
-          git commit -m "Auto update: $(date '+%Y-%m-%d')" || echo "No changes"
+          git commit -m "Auto update codes: $(date '+%Y-%m-%d')" || echo "No changes to commit"
           git push
