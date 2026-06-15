@@ -5,7 +5,10 @@ const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY;
 // ─── GAMES CONFIG ────────────────────────────────────────────────────────────
 const GAMES = [
   {
-fallbackCodes: [
+{
+  file: 'all-star-tower-defense-codes.html',
+  youtubeQuery: 'All Star Tower Defense codes 2026',
+  fallbackCodes: [
   { code: 'twete93dont', reward: '140 Stardust + 2,000 Gems' },
   { code: 'tungtungnobannersahur', reward: '120 Stardust + 300 Gems' },
   { code: 'fordanielxd', reward: '57 Stardust + 67 Gems' },
