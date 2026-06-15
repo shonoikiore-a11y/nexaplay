@@ -513,7 +513,7 @@
 
       <div class="article-meta-top">
         <span class="tag">Roblox Codes</span>
-        <span class="updated"><span class="dot"></span> Updated June 10, 2026</span>
+        <span class="updated"><span class="dot"></span> Updated June 15, 2026</span>
       </div>
 
       <h1>Anime Adventures Codes <span>(June 2026)</span></h1>
@@ -537,7 +537,7 @@
           <span>Update frequency</span>
         </div>
         <div class="stat-item">
-          <strong style="color:var(--white)">Jun 10</strong>
+          <strong style="color:var(--white)">Jun 15</strong>
           <span>Last checked</span>
         </div>
       </div>
@@ -720,15 +720,18 @@
   </footer>
 
   <script>
-    const activeCodes = [];
+    const activeCodes = [
+      {
+            code: "RELEASE",
+            reward: "Free Gems"
+      },
+      {
+            code: "THANKYOU",
+            reward: "Free Gems"
+      }
+];
 
-    const expiredCodes = [
-      { code: "UPDATESEASON3", reward: "Gems + Tickets" },
-      { code: "SORRYFORDELAY", reward: "Gems" },
-      { code: "ANNIVERSARY1", reward: "Gems + Summon Tickets" },
-      { code: "NEWYEAR2025", reward: "Gems" },
-      { code: "CHRISTMAS2024", reward: "Gems + Tickets" },
-    ];
+    const expiredCodes = [];
 
     function copyCode(code, btn) {
       navigator.clipboard.writeText(code).then(() => {
