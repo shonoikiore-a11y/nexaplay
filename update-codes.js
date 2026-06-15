@@ -1,6 +1,6 @@
+
 const fs = require('fs');
 
-// ─── GAMES CONFIG ────────────────────────────────────────────────────────────
 const GAMES = [
   {
     file: 'all-star-tower-defense-codes.html',
@@ -108,9 +108,78 @@ const GAMES = [
       { code: 'PLUSULTRA', reward: 'Free Spins' },
     ]
   },
+  {
+    file: 'peroxide-codes.html',
+    scrapeUrl: 'https://www.pockettactics.com/peroxide/codes',
+    fallbackCodes: [
+      { code: 'PEROXIDELAUNCH', reward: 'Free Rewards' },
+    ]
+  },
+  {
+    file: 'pet-simulator-99-codes.html',
+    scrapeUrl: 'https://www.pockettactics.com/pet-simulator-99/codes',
+    fallbackCodes: [
+      { code: 'PETSIM99', reward: 'Free Diamonds' },
+    ]
+  },
+  {
+    file: 'pet-simulator-x-codes.html',
+    scrapeUrl: 'https://www.pockettactics.com/pet-simulator-x/codes',
+    fallbackCodes: [
+      { code: 'PETSIMX', reward: 'Free Diamonds' },
+    ]
+  },
+  {
+    file: 'project-slayers-codes.html',
+    scrapeUrl: 'https://www.pockettactics.com/project-slayers/codes',
+    fallbackCodes: [
+      { code: 'SLAYERLAUNCH', reward: 'Free Spins' },
+    ]
+  },
+  {
+    file: 'shindo-life-codes.html',
+    scrapeUrl: 'https://www.pockettactics.com/shindo-life/codes',
+    fallbackCodes: [
+      { code: 'SHINDOCODE', reward: 'Free Spins' },
+    ]
+  },
+  {
+    file: 'sols-rng-codes.html',
+    scrapeUrl: 'https://www.pockettactics.com/sols-rng/codes',
+    fallbackCodes: [
+      { code: 'SOLSLAUNCH', reward: 'Free Rolls' },
+    ]
+  },
+  {
+    file: 'strongest-battlegrounds-codes.html',
+    scrapeUrl: 'https://www.pockettactics.com/strongest-battlegrounds/codes',
+    fallbackCodes: [
+      { code: 'STRONGLAUNCH', reward: 'Free Gems' },
+    ]
+  },
+  {
+    file: 'type-soul-codes.html',
+    scrapeUrl: 'https://www.pockettactics.com/type-soul/codes',
+    fallbackCodes: [
+      { code: 'TYPESOUL', reward: 'Free Spins' },
+    ]
+  },
+  {
+    file: 'vv-ultimatum-codes.html',
+    scrapeUrl: 'https://www.pockettactics.com/vv-ultimatum/codes',
+    fallbackCodes: [
+      { code: 'VVLAUNCH', reward: 'Free Rewards' },
+    ]
+  },
+  {
+    file: 'wisteria-2-codes.html',
+    scrapeUrl: 'https://www.pockettactics.com/wisteria-2/codes',
+    fallbackCodes: [
+      { code: 'WISTERIA2', reward: 'Free Spins' },
+    ]
+  },
 ];
 
-// ─── SCRAPE CODES FROM POCKET TACTICS ────────────────────────────────────────
 async function scrapeCodesFromPage(url) {
   try {
     const res = await fetch(url, {
@@ -118,17 +187,14 @@ async function scrapeCodesFromPage(url) {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
       }
     });
-
     if (!res.ok) {
       console.log('   Page returned: ' + res.status);
       return null;
     }
-
     const html = await res.text();
     const codes = [];
 
-    // Pocket Tactics lists codes as: * **CODE** - reward description
-    const pattern = /\*\s*\*\*([A-Za-z0-9_!]+)\*\*\s*[-–]\s*([^\n*]+)/g;
+    const pattern = /\*\s*\*\*([A-Za-z0-9_!]+)\*\*\s*[-]\s*([^\n*]+)/g;
     let match;
     while ((match = pattern.exec(html)) !== null) {
       const code = match[1].trim();
@@ -138,8 +204,7 @@ async function scrapeCodesFromPage(url) {
       }
     }
 
-    // Also try plain list format: * CODE - reward
-    const pattern2 = /<li><strong>([A-Za-z0-9_!]+)<\/strong>\s*[-–]\s*([^<]+)<\/li>/g;
+    const pattern2 = /<li><strong>([A-Za-z0-9_!]+)<\/strong>\s*[-]\s*([^<]+)<\/li>/g;
     while ((match = pattern2.exec(html)) !== null) {
       const code = match[1].trim();
       const reward = match[2].trim().substring(0, 60);
@@ -151,14 +216,12 @@ async function scrapeCodesFromPage(url) {
     }
 
     return codes.length > 0 ? codes : null;
-
   } catch (err) {
     console.log('   Scrape failed: ' + err.message);
     return null;
   }
 }
 
-// ─── UPDATE HTML FILE ─────────────────────────────────────────────────────────
 function updateHTMLFile(filePath, activeCodes) {
   if (!fs.existsSync(filePath)) {
     console.log('   File not found: ' + filePath);
@@ -195,26 +258,21 @@ function updateHTMLFile(filePath, activeCodes) {
   return true;
 }
 
-// ─── MAIN ─────────────────────────────────────────────────────────────────────
 async function main() {
   console.log('NexaPlay Code Updater - ' + new Date().toISOString());
   let updatedCount = 0;
 
   for (const game of GAMES) {
     console.log('Processing: ' + game.file);
-
     const scrapedCodes = await scrapeCodesFromPage(game.scrapeUrl);
     const activeCodes = (scrapedCodes && scrapedCodes.length > 0) ? scrapedCodes : game.fallbackCodes;
-
     console.log('   Active: ' + activeCodes.length + ' codes');
     console.log('   Source: ' + (scrapedCodes ? 'Pocket Tactics' : 'Fallback'));
-
     const updated = updateHTMLFile(game.file, activeCodes);
     if (updated) {
       updatedCount++;
       console.log('   Saved!');
     }
-
     await new Promise(function(r) { setTimeout(r, 1000); });
   }
 
