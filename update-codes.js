@@ -1,11 +1,12 @@
 const fs = require('fs');
-
-// ─── SOURCES ───────────────────────────────────────────────────────────────
-// Map each HTML file to its BloxZone scrape URL
+ 
+const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY;
+ 
+// ─── GAMES CONFIG ────────────────────────────────────────────────────────────
 const GAMES = [
   {
     file: 'all-star-tower-defense-codes.html',
-    url: 'https://bloxz.one/game-codes/all-star-tower-defense',
+    youtubeQuery: 'All Star Tower Defense codes 2026',
     fallbackCodes: [
       { code: 'Sub2MobileOF', reward: 'Free Gems' },
       { code: 'LegendaryCode', reward: 'Free Gems + Stardust' },
@@ -14,7 +15,7 @@ const GAMES = [
   },
   {
     file: 'anime-adventures-codes.html',
-    url: 'https://bloxz.one/game-codes/anime-adventures',
+    youtubeQuery: 'Anime Adventures codes 2026',
     fallbackCodes: [
       { code: 'RELEASE', reward: 'Free Gems' },
       { code: 'THANKYOU', reward: 'Free Gems' },
@@ -22,35 +23,35 @@ const GAMES = [
   },
   {
     file: 'anime-defenders-codes.html',
-    url: 'https://bloxz.one/game-codes/anime-defenders',
+    youtubeQuery: 'Anime Defenders codes 2026',
     fallbackCodes: [
       { code: 'LAUNCH', reward: 'Free Gems' },
     ]
   },
   {
     file: 'anime-fighting-simulator-x-codes.html',
-    url: 'https://bloxz.one/game-codes/anime-fighting-simulator-x',
+    youtubeQuery: 'Anime Fighting Simulator X codes 2026',
     fallbackCodes: [
       { code: 'AFSX', reward: 'Free Yen' },
     ]
   },
   {
     file: 'anime-vanguards-codes.html',
-    url: 'https://bloxz.one/game-codes/anime-vanguards',
+    youtubeQuery: 'Anime Vanguards codes 2026',
     fallbackCodes: [
       { code: 'VANGUARD', reward: 'Free Gems' },
     ]
   },
   {
     file: 'bee-swarm-simulator-codes.html',
-    url: 'https://bloxz.one/game-codes/bee-swarm-simulator',
+    youtubeQuery: 'Bee Swarm Simulator codes 2026',
     fallbackCodes: [
       { code: 'BEESMAS', reward: 'Free Honey' },
     ]
   },
   {
     file: 'blox-fruits-codes.html',
-    url: 'https://bloxz.one/game-codes/blox-fruits',
+    youtubeQuery: 'Blox Fruits codes 2026',
     fallbackCodes: [
       { code: 'BIGNEWS', reward: 'Free XP Boost' },
       { code: 'ADMIN_CENA', reward: 'Free XP Boost' },
@@ -58,200 +59,237 @@ const GAMES = [
   },
   {
     file: 'blue-lock-rivals-codes.html',
-    url: 'https://bloxz.one/game-codes/blue-lock-rivals',
+    youtubeQuery: 'Blue Lock Rivals codes 2026',
     fallbackCodes: [
       { code: 'BLUELOCKLAUNCH', reward: 'Free Coins' },
     ]
   },
   {
     file: 'demon-piece-codes.html',
-    url: 'https://bloxz.one/game-codes/demon-piece',
+    youtubeQuery: 'Demon Piece codes 2026',
     fallbackCodes: [
       { code: 'DEMONLAUNCH', reward: 'Free Gems' },
     ]
   },
   {
     file: 'fruit-battlegrounds-codes.html',
-    url: 'https://bloxz.one/game-codes/fruit-battlegrounds',
+    youtubeQuery: 'Fruit Battlegrounds codes 2026',
     fallbackCodes: [
       { code: 'FRUITSEASON', reward: 'Free Tokens' },
     ]
   },
   {
     file: 'grand-piece-online-codes.html',
-    url: 'https://bloxz.one/game-codes/grand-piece-online',
+    youtubeQuery: 'Grand Piece Online codes 2026',
     fallbackCodes: [
       { code: 'GPO2024', reward: 'Free Gems' },
     ]
   },
   {
     file: 'jailbreak-codes.html',
-    url: 'https://bloxz.one/game-codes/jailbreak',
+    youtubeQuery: 'Jailbreak Roblox codes 2026',
     fallbackCodes: [
       { code: 'JAILBREAK', reward: 'Free Cash' },
     ]
   },
   {
     file: 'king-legacy-codes.html',
-    url: 'https://bloxz.one/game-codes/king-legacy',
+    youtubeQuery: 'King Legacy codes 2026',
     fallbackCodes: [
       { code: 'KINGGEM', reward: 'Free Gems' },
     ]
   },
   {
     file: 'murder-mystery-2-codes.html',
-    url: 'https://bloxz.one/game-codes/murder-mystery-2',
+    youtubeQuery: 'Murder Mystery 2 codes 2026',
     fallbackCodes: [
       { code: 'COMB4T2', reward: 'Free Knife' },
     ]
   },
   {
     file: 'my-hero-mania-codes.html',
-    url: 'https://bloxz.one/game-codes/my-hero-mania',
+    youtubeQuery: 'My Hero Mania codes 2026',
     fallbackCodes: [
       { code: 'PLUSULTRA', reward: 'Free Spins' },
     ]
   },
 ];
-
-// ─── SCRAPER ────────────────────────────────────────────────────────────────
-async function fetchCodes(url) {
-  try {
-    const res = await fetch(url, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (compatible; NexaPlayBot/1.0)'
+ 
+// ─── EXTRACT CODES FROM TEXT ──────────────────────────────────────────────────
+function extractCodesFromText(text) {
+  const codes = [];
+ 
+  // Match patterns like: CODE - reward or CODE: reward or just ALLCAPS codes
+  const patterns = [
+    // "CODE123 - Free Gems" or "CODE123 – Free Gems"
+    /\b([A-Z][A-Z0-9_!]{3,})\s*[-–]\s*([^\n,!]+)/g,
+    // "Code: CODE123"
+    /[Cc]ode[:\s]+([A-Z][A-Z0-9_!]{3,})/g,
+    // Lines with codes in lists like "• CODE123 - reward"
+    /[•\-\*]\s*([A-Z][A-Z0-9_!]{3,})\s*[-–:]\s*([^\n]+)/g,
+  ];
+ 
+  for (const pattern of patterns) {
+    let match;
+    while ((match = pattern.exec(text)) !== null) {
+      const code = match[1];
+      const reward = match[2] ? match[2].trim().substring(0, 50) : 'Free Reward';
+ 
+      // Filter out common false positives
+      if (
+        code.length >= 4 &&
+        code.length <= 30 &&
+        !['HTTP', 'HTTPS', 'HTML', 'JSON', 'NULL', 'TRUE', 'FALSE', 'SUBSCRIBE', 'ROBLOX'].includes(code)
+      ) {
+        if (!codes.find(c => c.code === code)) {
+          codes.push({ code, reward });
+        }
       }
-    });
-    if (!res.ok) return null;
-    const html = await res.text();
-
-    // Extract codes from the page - look for patterns like code text in tables or lists
-    const activeCodes = [];
-    const expiredCodes = [];
-
-    // Match code patterns - BloxZone typically shows codes in structured format
-    // Look for code entries: usually in <td> or <li> elements
-    const codePattern = /([A-Z0-9_!]+)\s*(?:<[^>]+>)*\s*[-–]\s*([^<\n]+)/gi;
-    const matches = [...html.matchAll(codePattern)];
-
-    // Also try to find JSON data embedded in the page
-    const jsonMatch = html.match(/"codes"\s*:\s*(\[[\s\S]*?\])/);
-    if (jsonMatch) {
-      try {
-        const codes = JSON.parse(jsonMatch[1]);
-        codes.forEach(c => {
-          if (c.active !== false) {
-            activeCodes.push({ code: c.code || c.name, reward: c.reward || c.description || 'Free Reward' });
-          } else {
-            expiredCodes.push({ code: c.code || c.name, reward: c.reward || c.description || 'Expired' });
-          }
-        });
-        if (activeCodes.length > 0) return { activeCodes, expiredCodes };
-      } catch (e) {}
     }
-
-    return null;
-  } catch (e) {
-    console.log(`Failed to fetch ${url}: ${e.message}`);
+  }
+ 
+  return codes;
+}
+ 
+// ─── FETCH CODES FROM YOUTUBE ─────────────────────────────────────────────────
+async function fetchCodesFromYouTube(query) {
+  try {
+    if (!YOUTUBE_API_KEY) {
+      console.log('   ⚠️  No YouTube API key found, using fallback codes');
+      return null;
+    }
+ 
+    // Search for recent videos about this game's codes
+    const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&type=video&order=date&maxResults=5&key=${YOUTUBE_API_KEY}`;
+    const searchRes = await fetch(searchUrl);
+    const searchData = await searchRes.json();
+ 
+    if (!searchData.items || searchData.items.length === 0) return null;
+ 
+    const allCodes = [];
+ 
+    // Check each video's description for codes
+    for (const item of searchData.items) {
+      const videoId = item.id.videoId;
+      const description = item.snippet.description || '';
+      const title = item.snippet.title || '';
+ 
+      // Extract codes from title and description
+      const titleCodes = extractCodesFromText(title);
+      const descCodes = extractCodesFromText(description);
+ 
+      // Get full video details for longer description
+      const videoUrl = `https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoId}&key=${YOUTUBE_API_KEY}`;
+      const videoRes = await fetch(videoUrl);
+      const videoData = await videoRes.json();
+ 
+      if (videoData.items && videoData.items[0]) {
+        const fullDesc = videoData.items[0].snippet.description || '';
+        const fullCodes = extractCodesFromText(fullDesc);
+        allCodes.push(...titleCodes, ...descCodes, ...fullCodes);
+      }
+    }
+ 
+    // Deduplicate codes
+    const seen = new Set();
+    const uniqueCodes = allCodes.filter(c => {
+      if (seen.has(c.code)) return false;
+      seen.add(c.code);
+      return true;
+    });
+ 
+    return uniqueCodes.length > 0 ? uniqueCodes : null;
+ 
+  } catch (err) {
+    console.log(`   ⚠️  YouTube fetch failed: ${err.message}`);
     return null;
   }
 }
-
-// ─── HTML UPDATER ────────────────────────────────────────────────────────────
+ 
+// ─── UPDATE HTML FILE ─────────────────────────────────────────────────────────
 function updateHTMLFile(filePath, activeCodes, expiredCodes) {
   if (!fs.existsSync(filePath)) {
-    console.log(`File not found: ${filePath}`);
+    console.log(`   ❌ File not found: ${filePath}`);
     return false;
   }
-
+ 
   let html = fs.readFileSync(filePath, 'utf8');
-
-  // Build new code arrays as JS
+ 
   const activeStr = JSON.stringify(activeCodes, null, 6)
     .replace(/"code":/g, 'code:')
     .replace(/"reward":/g, 'reward:');
-
+ 
   const expiredStr = JSON.stringify(expiredCodes, null, 6)
     .replace(/"code":/g, 'code:')
     .replace(/"reward":/g, 'reward:');
-
-  // Replace the activeCodes array
+ 
   html = html.replace(
     /const activeCodes\s*=\s*\[[\s\S]*?\];/,
     `const activeCodes = ${activeStr};`
   );
-
-  // Replace the expiredCodes array
+ 
   html = html.replace(
     /const expiredCodes\s*=\s*\[[\s\S]*?\];/,
     `const expiredCodes = ${expiredStr};`
   );
-
-  // Update the "Last checked" date
+ 
+  // Update last checked date
   const today = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   html = html.replace(
     /<strong style="color:var\(--white\)">[^<]+<\/strong>\s*\n\s*<span>Last checked<\/span>/,
     `<strong style="color:var(--white)">${today}</strong>\n          <span>Last checked</span>`
   );
-
-  // Update the "Updated" date in article-meta-top
+ 
+  // Update updated date
   const fullDate = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-  html = html.replace(
-    /Updated [A-Za-z]+ \d+, \d{4}/,
-    `Updated ${fullDate}`
-  );
-
-  // Update month in h1 title
+  html = html.replace(/Updated [A-Za-z]+ \d+, \d{4}/, `Updated ${fullDate}`);
+ 
+  // Update month in h1
   const monthYear = new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
   html = html.replace(
     /\((?:January|February|March|April|May|June|July|August|September|October|November|December) \d{4}\)/g,
     `(${monthYear})`
   );
-
+ 
   fs.writeFileSync(filePath, html, 'utf8');
   return true;
 }
-
-// ─── MAIN ────────────────────────────────────────────────────────────────────
+ 
+// ─── MAIN ─────────────────────────────────────────────────────────────────────
 async function main() {
   console.log(`🚀 NexaPlay Code Updater — ${new Date().toISOString()}`);
   let updatedCount = 0;
-
+ 
   for (const game of GAMES) {
     console.log(`\n📋 Processing: ${game.file}`);
-
-    // Try to scrape live codes
-    const scraped = await fetchCodes(game.url);
-    const activeCodes = (scraped && scraped.activeCodes.length > 0)
-      ? scraped.activeCodes
+ 
+    // Try YouTube first
+    const youtubeCodes = await fetchCodesFromYouTube(game.youtubeQuery);
+    const activeCodes = (youtubeCodes && youtubeCodes.length > 0)
+      ? youtubeCodes
       : game.fallbackCodes;
-    const expiredCodes = (scraped && scraped.expiredCodes.length > 0)
-      ? scraped.expiredCodes
-      : [];
-
+ 
     console.log(`   ✅ Active: ${activeCodes.length} codes`);
-    console.log(`   ❌ Expired: ${expiredCodes.length} codes`);
-    console.log(`   📡 Source: ${scraped ? 'Live scrape' : 'Fallback codes'}`);
-
-    const updated = updateHTMLFile(game.file, activeCodes, expiredCodes);
+    console.log(`   📡 Source: ${youtubeCodes ? 'YouTube' : 'Fallback'}`);
+ 
+    const updated = updateHTMLFile(game.file, activeCodes, []);
     if (updated) {
       updatedCount++;
       console.log(`   💾 Saved!`);
     }
-
-    // Small delay to avoid rate limiting
-    await new Promise(r => setTimeout(r, 500));
+ 
+    await new Promise(r => setTimeout(r, 300));
   }
-
-  // Write a log file
+ 
   fs.writeFileSync('last-updated.txt',
     `Last updated: ${new Date().toUTCString()}\nFiles updated: ${updatedCount}/${GAMES.length}\n`
   );
-
+ 
   console.log(`\n✅ Done! Updated ${updatedCount}/${GAMES.length} files.`);
 }
-
+ 
 main().catch(err => {
   console.error('❌ Error:', err);
   process.exit(1);
 });
+ 
