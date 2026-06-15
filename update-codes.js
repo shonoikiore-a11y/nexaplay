@@ -5,13 +5,13 @@ const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY;
 // ─── GAMES CONFIG ────────────────────────────────────────────────────────────
 const GAMES = [
   {
-    file: 'all-star-tower-defense-codes.html',
-    youtubeQuery: 'All Star Tower Defense codes 2026',
-    fallbackCodes: [
-      { code: 'Sub2MobileOF', reward: 'Free Gems' },
-      { code: 'LegendaryCode', reward: 'Free Gems + Stardust' },
-      { code: '1BILVISITS', reward: 'Free Gems' },
-    ]
+fallbackCodes: [
+  { code: 'twete93dont', reward: '140 Stardust + 2,000 Gems' },
+  { code: 'tungtungnobannersahur', reward: '120 Stardust + 300 Gems' },
+  { code: 'fordanielxd', reward: '57 Stardust + 67 Gems' },
+  { code: 'omgupdate2026', reward: '170 Stardust + 2,700 Gems' },
+  { code: 'cosmicrebel', reward: '170 Stardust + 2,700 Gems' },
+]
   },
   {
     file: 'anime-adventures-codes.html',
