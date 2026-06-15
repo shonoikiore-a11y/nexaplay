@@ -1,180 +1,159 @@
 const fs = require('fs');
 
-const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY;
-
 // ─── GAMES CONFIG ────────────────────────────────────────────────────────────
 const GAMES = [
   {
     file: 'all-star-tower-defense-codes.html',
-    youtubeQuery: 'All Star Tower Defense codes 2026',
+    scrapeUrl: 'https://www.pockettactics.com/all-star-tower-defense/codes',
     fallbackCodes: [
       { code: 'twete93dont', reward: '140 Stardust + 2,000 Gems' },
-      { code: 'tungtungnobannersahur', reward: '120 Stardust + 300 Gems' },
-      { code: 'fordanielxd', reward: '57 Stardust + 67 Gems' },
       { code: 'omgupdate2026', reward: '170 Stardust + 2,700 Gems' },
-      { code: 'cosmicrebel', reward: '170 Stardust + 2,700 Gems' },
     ]
   },
   {
     file: 'anime-adventures-codes.html',
-    youtubeQuery: 'Anime Adventures codes 2026',
+    scrapeUrl: 'https://www.pockettactics.com/anime-adventures/codes',
     fallbackCodes: [
       { code: 'RELEASE', reward: 'Free Gems' },
-      { code: 'THANKYOU', reward: 'Free Gems' },
     ]
   },
   {
     file: 'anime-defenders-codes.html',
-    youtubeQuery: 'Anime Defenders codes 2026',
+    scrapeUrl: 'https://www.pockettactics.com/anime-defenders/codes',
     fallbackCodes: [
       { code: 'LAUNCH', reward: 'Free Gems' },
     ]
   },
   {
     file: 'anime-fighting-simulator-x-codes.html',
-    youtubeQuery: 'Anime Fighting Simulator X codes 2026',
+    scrapeUrl: 'https://www.pockettactics.com/anime-fighting-simulator/codes',
     fallbackCodes: [
       { code: 'AFSX', reward: 'Free Yen' },
     ]
   },
   {
     file: 'anime-vanguards-codes.html',
-    youtubeQuery: 'Anime Vanguards codes 2026',
+    scrapeUrl: 'https://www.pockettactics.com/anime-vanguards/codes',
     fallbackCodes: [
       { code: 'VANGUARD', reward: 'Free Gems' },
     ]
   },
   {
     file: 'bee-swarm-simulator-codes.html',
-    youtubeQuery: 'Bee Swarm Simulator codes 2026',
+    scrapeUrl: 'https://www.pockettactics.com/bee-swarm-simulator/codes',
     fallbackCodes: [
       { code: 'BEESMAS', reward: 'Free Honey' },
     ]
   },
   {
     file: 'blox-fruits-codes.html',
-    youtubeQuery: 'Blox Fruits codes 2026',
+    scrapeUrl: 'https://www.pockettactics.com/blox-fruits/codes',
     fallbackCodes: [
       { code: 'BIGNEWS', reward: 'Free XP Boost' },
-      { code: 'ADMIN_CENA', reward: 'Free XP Boost' },
     ]
   },
   {
     file: 'blue-lock-rivals-codes.html',
-    youtubeQuery: 'Blue Lock Rivals codes 2026',
+    scrapeUrl: 'https://www.pockettactics.com/blue-lock-rivals/codes',
     fallbackCodes: [
       { code: 'BLUELOCKLAUNCH', reward: 'Free Coins' },
     ]
   },
   {
     file: 'demon-piece-codes.html',
-    youtubeQuery: 'Demon Piece codes 2026',
+    scrapeUrl: 'https://www.pockettactics.com/demon-piece/codes',
     fallbackCodes: [
       { code: 'DEMONLAUNCH', reward: 'Free Gems' },
     ]
   },
   {
     file: 'fruit-battlegrounds-codes.html',
-    youtubeQuery: 'Fruit Battlegrounds codes 2026',
+    scrapeUrl: 'https://www.pockettactics.com/fruit-battlegrounds/codes',
     fallbackCodes: [
       { code: 'FRUITSEASON', reward: 'Free Tokens' },
     ]
   },
   {
     file: 'grand-piece-online-codes.html',
-    youtubeQuery: 'Grand Piece Online codes 2026',
+    scrapeUrl: 'https://www.pockettactics.com/grand-piece-online/codes',
     fallbackCodes: [
       { code: 'GPO2024', reward: 'Free Gems' },
     ]
   },
   {
     file: 'jailbreak-codes.html',
-    youtubeQuery: 'Jailbreak Roblox codes 2026',
+    scrapeUrl: 'https://www.pockettactics.com/jailbreak/codes',
     fallbackCodes: [
       { code: 'JAILBREAK', reward: 'Free Cash' },
     ]
   },
   {
     file: 'king-legacy-codes.html',
-    youtubeQuery: 'King Legacy codes 2026',
+    scrapeUrl: 'https://www.pockettactics.com/king-legacy/codes',
     fallbackCodes: [
       { code: 'KINGGEM', reward: 'Free Gems' },
     ]
   },
   {
     file: 'murder-mystery-2-codes.html',
-    youtubeQuery: 'Murder Mystery 2 codes 2026',
+    scrapeUrl: 'https://www.pockettactics.com/murder-mystery-2/codes',
     fallbackCodes: [
       { code: 'COMB4T2', reward: 'Free Knife' },
     ]
   },
   {
     file: 'my-hero-mania-codes.html',
-    youtubeQuery: 'My Hero Mania codes 2026',
+    scrapeUrl: 'https://www.pockettactics.com/my-hero-mania/codes',
     fallbackCodes: [
       { code: 'PLUSULTRA', reward: 'Free Spins' },
     ]
   },
 ];
 
-// ─── EXTRACT CODES FROM TEXT ──────────────────────────────────────────────────
-function extractCodesFromText(text) {
-  const codes = [];
-  const patterns = [
-    /\b([A-Z][A-Z0-9_!]{3,})\s*[-]\s*([^\n,!]+)/g,
-    /[Cc]ode[:\s]+([A-Z][A-Z0-9_!]{3,})/g,
-  ];
+// ─── SCRAPE CODES FROM POCKET TACTICS ────────────────────────────────────────
+async function scrapeCodesFromPage(url) {
+  try {
+    const res = await fetch(url, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+      }
+    });
 
-  for (const pattern of patterns) {
+    if (!res.ok) {
+      console.log('   Page returned: ' + res.status);
+      return null;
+    }
+
+    const html = await res.text();
+    const codes = [];
+
+    // Pocket Tactics lists codes as: * **CODE** - reward description
+    const pattern = /\*\s*\*\*([A-Za-z0-9_!]+)\*\*\s*[-–]\s*([^\n*]+)/g;
     let match;
-    while ((match = pattern.exec(text)) !== null) {
-      const code = match[1];
-      const reward = match[2] ? match[2].trim().substring(0, 50) : 'Free Reward';
-      if (
-        code.length >= 4 &&
-        code.length <= 30 &&
-        !['HTTP', 'HTTPS', 'HTML', 'JSON', 'NULL', 'TRUE', 'FALSE', 'SUBSCRIBE', 'ROBLOX'].includes(code)
-      ) {
+    while ((match = pattern.exec(html)) !== null) {
+      const code = match[1].trim();
+      const reward = match[2].trim().substring(0, 60);
+      if (code.length >= 3 && code.length <= 40) {
+        codes.push({ code: code, reward: reward });
+      }
+    }
+
+    // Also try plain list format: * CODE - reward
+    const pattern2 = /<li><strong>([A-Za-z0-9_!]+)<\/strong>\s*[-–]\s*([^<]+)<\/li>/g;
+    while ((match = pattern2.exec(html)) !== null) {
+      const code = match[1].trim();
+      const reward = match[2].trim().substring(0, 60);
+      if (code.length >= 3 && code.length <= 40) {
         if (!codes.find(function(c) { return c.code === code; })) {
           codes.push({ code: code, reward: reward });
         }
       }
     }
-  }
-  return codes;
-}
 
-// ─── FETCH CODES FROM YOUTUBE ─────────────────────────────────────────────────
-async function fetchCodesFromYouTube(query) {
-  try {
-    if (!YOUTUBE_API_KEY) {
-      console.log('   No YouTube API key found, using fallback codes');
-      return null;
-    }
-    const searchUrl = 'https://www.googleapis.com/youtube/v3/search?part=snippet&q=' + encodeURIComponent(query) + '&type=video&order=date&maxResults=5&key=' + YOUTUBE_API_KEY;
-    const searchRes = await fetch(searchUrl);
-    const searchData = await searchRes.json();
-    if (!searchData.items || searchData.items.length === 0) return null;
+    return codes.length > 0 ? codes : null;
 
-    const allCodes = [];
-    for (const item of searchData.items) {
-      const description = item.snippet.description || '';
-      const title = item.snippet.title || '';
-      const titleCodes = extractCodesFromText(title);
-      const descCodes = extractCodesFromText(description);
-      allCodes.push(...titleCodes, ...descCodes);
-    }
-
-    const seen = new Set();
-    const uniqueCodes = allCodes.filter(function(c) {
-      if (seen.has(c.code)) return false;
-      seen.add(c.code);
-      return true;
-    });
-
-    return uniqueCodes.length > 0 ? uniqueCodes : null;
   } catch (err) {
-    console.log('   YouTube fetch failed: ' + err.message);
+    console.log('   Scrape failed: ' + err.message);
     return null;
   }
 }
@@ -223,17 +202,20 @@ async function main() {
 
   for (const game of GAMES) {
     console.log('Processing: ' + game.file);
-    const youtubeCodes = await fetchCodesFromYouTube(game.youtubeQuery);
-    const activeCodes = (youtubeCodes && youtubeCodes.length > 0) ? youtubeCodes : game.fallbackCodes;
+
+    const scrapedCodes = await scrapeCodesFromPage(game.scrapeUrl);
+    const activeCodes = (scrapedCodes && scrapedCodes.length > 0) ? scrapedCodes : game.fallbackCodes;
+
     console.log('   Active: ' + activeCodes.length + ' codes');
-    console.log('   Source: ' + (youtubeCodes ? 'YouTube' : 'Fallback'));
+    console.log('   Source: ' + (scrapedCodes ? 'Pocket Tactics' : 'Fallback'));
 
     const updated = updateHTMLFile(game.file, activeCodes);
     if (updated) {
       updatedCount++;
       console.log('   Saved!');
     }
-    await new Promise(function(r) { setTimeout(r, 300); });
+
+    await new Promise(function(r) { setTimeout(r, 1000); });
   }
 
   fs.writeFileSync('last-updated.txt', 'Last updated: ' + new Date().toUTCString() + '\nFiles updated: ' + updatedCount + '/' + GAMES.length + '\n');
